@@ -1,7 +1,6 @@
 <script setup>
 import {ref, watch} from "vue";
 import router from "@/router/index.js";
-import {User} from '@element-plus/icons-vue'
 import logo from '@/assets/logo.png'
 
 let activeMenu = ref(sessionStorage.getItem('activeMenu') || '/index')
@@ -36,12 +35,9 @@ function handleSelect(index) {
                  router>
           <el-menu-item class="menu-item" index="/index">新闻快讯</el-menu-item>
           <el-menu-item class="menu-item" index="/index/industry">行业信息</el-menu-item>
+          <el-menu-item class="menu-item" index="/index/chart">图表分析</el-menu-item>
           <el-menu-item class="menu-item" index="/index/credit">企业信用评估</el-menu-item>
           <el-menu-item class="menu-item" index="/index/risk">金融风险预测</el-menu-item>
-          <el-menu-item class="menu-item" index="/index/chart">图表分析</el-menu-item>
-          <el-menu-item class="menu-item" index="/index/account">
-            <el-icon><User/></el-icon>
-          </el-menu-item>
         </el-menu>
       </div>
     </div>

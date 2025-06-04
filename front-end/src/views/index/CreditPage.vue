@@ -2,6 +2,10 @@
 import {onMounted, reactive, ref, onUnmounted, nextTick} from "vue";
 import * as echarts from 'echarts'
 import {StarFilled} from "@element-plus/icons-vue";
+import {getTokenHeader, post, postMultipart} from "@/net/index.js";
+import axios from "axios";
+import {ElMessage} from "element-plus";
+import router from "@/router/index.js";
 
 const form = reactive({
   showOutput1: false,
@@ -17,22 +21,22 @@ const form = reactive({
     owner_equity: ''      // 所有者权益合计（万元）
   },
   output1 : {
-    debt_rate: [10, 25, 50, 75, 100, 50],
-    interest: [10, 25, 50, 75, 100, 90],
-    inventory_turn: [10, 25, 50, 75, 100, 90],
-    flow_debt: [10, 25, 50, 75, 100, 90],
-    cost: [10, 25, 50, 75, 100, 90],
-    owner_equity: [10, 25, 50, 75, 100, 90]
+    debt_rate: [],
+    interest: [],
+    inventory_turn: [],
+    flow_debt: [],
+    cost: [],
+    owner_equity: []
   },
   input2: {
     target_file: ''
   },
   output2: {
-    star: 3,                   // 星级
-    credit_message: 'hhhhhh',  // 信用等级分析
-    debt_message: 'jjjjjj'     // 资产负债率评价
+    star: '',                   // 星级
+    credit_message: '',  // 信用等级分析
+    debt_message: ''     // 资产负债率评价
   },
-  template_file: new Blob(['列1,列2\n值1,值2'], { type: 'text/csv;charset=utf-8;' })
+  template_file: ''
 })
 
 const chartContainer1 = ref(null)
@@ -43,14 +47,38 @@ const chartContainer5 = ref(null)
 const chartContainer6 = ref(null)
 
 onMounted(() => {
-  // TODO 获取模版文件
+  getTemplateFile()
 })
 
+// 获取模版文件
+function getTemplateFile() {
+  const header = getTokenHeader()
+  if(!header){
+    // token 无效，不能发送本次请求
+    ElMessage.warning('登录状态过期，请重新登录')
+    router.push('/')
+    return
+  }
+
+
+  axios.get('/Model/GetTemplate', {
+    responseType: 'blob',
+    headers: header
+  }).then(response => {
+    form.template_file = new Blob([response.data], { type: 'text/csv' });
+  }).catch(error => {
+    ElMessage.warning('CSV 模版文件获取失败')
+  });
+}
+
+// 获取决策树评估结果
 function getDecisionTreeRes() {
   form.showOutput1 = true
   form.loading1 = true
-  setTimeout(() => {
-    // TODO 发送input1给后端，获取评估结果保存在output1
+
+
+  post('/Model/GetCredit', form.input1, (data) => {
+    form.output1 = data
     form.loading1 = false
     nextTick(() => {
       const chart1 = echarts.init(chartContainer1.value)
@@ -66,16 +94,21 @@ function getDecisionTreeRes() {
       chart5.setOption(getOption(form.output1.cost, '成本费用利润率', '%'))
       chart6.setOption(getOption(form.output1.owner_equity, '所有者权益合计', '万元'))
     })
-  }, 1500)
+  })
 }
 
+// 获取CNN评估结果
 function getCnnRes() {
   form.showOutput2 = true
   form.loading2 = true
-  setTimeout(() => {
-    // TODO 获取CNN评估结果，保存到output2中
+  const formData = new FormData();
+  formData.append('targetFile', form.input2.target_file);
+
+
+  postMultipart('/Model/GetTemplate', formData, (data) => {
+    form.output2 = data
     form.loading2 = false
-  }, 1500)
+  })
 }
 
 function getPositionLabel(data) {

@@ -2,6 +2,8 @@
 import {reactive, ref} from "vue";
 import {Clock, Lock, Message} from "@element-plus/icons-vue"
 import {validateCode, validateEmail, validatePassword} from "@/validate/index.js";
+import axios from "axios";
+import {ElMessage} from "element-plus";
 
 // 当前的步骤
 const formRef = ref()
@@ -39,6 +41,42 @@ const rule = {
   ]
 }
 
+
+function askForCode() {
+  axios.post('/User/SendCode', {
+    email: form.email
+  }).then(({data}) => {
+    if(data.code === 200){  // 服务器处理成功
+      ElMessage.success('已发送验证码至指定邮箱')
+    }
+    else{   // 服务器处理失败
+      console.warn(`请求地址：/User/SendCode，状态码：${data.code}，错误信息：${data.message}`)
+      ElMessage.warning(data.message)
+    }
+  }).catch(err => {  // 连接失败
+    console.warn(err)
+    ElMessage.warning('发生了一些错误，请联系管理员')
+  })
+}
+
+function userReset() {
+  axios.post('/User/ModifyPassword', {
+    password: form.password,
+    email: form.email,
+    code: form.code
+  }).then(({data}) => {
+    if(data.code === 200){  // 服务器处理成功
+      ElMessage.success('用户修改密码成功')
+    }
+    else{   // 服务器处理失败
+      console.warn(`请求地址：/User/SendCode，状态码：${data.code}，错误信息：${data.message}`)
+      ElMessage.warning(data.message)
+    }
+  }).catch(err => {  // 连接失败
+    console.warn(err)
+    ElMessage.warning('发生了一些错误，请联系管理员')
+  })
+}
 
 </script>
 
@@ -84,14 +122,14 @@ const rule = {
             </el-col>
 
             <el-col :span="5">
-              <el-button class="askCode">获取验证码</el-button>
+              <el-button @click="askForCode" class="askCode">获取验证码</el-button>
             </el-col>
           </el-row>
         </el-form-item>
       </el-form>
     </div>
     <div style="margin-top: 50px">
-      <el-button style="width: 250px" class="reset">重置密码</el-button>
+      <el-button @click="userReset" style="width: 250px" class="reset">重置密码</el-button>
     </div>
   </div>
 </template>

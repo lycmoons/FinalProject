@@ -4,6 +4,8 @@ import { User, Message, Lock, Clock } from "@element-plus/icons-vue"
 import router from "@/router/index.js";
 
 import {validateCode, validateEmail, validatePassword, validateUsername} from "@/validate/index.js";
+import axios from "axios";
+import {ElMessage} from "element-plus";
 
 const formRef = ref()
 const form = reactive({
@@ -13,6 +15,43 @@ const form = reactive({
   email: '',
   code: ''
 })
+
+function askForCode() {
+  axios.post('/User/SendCode', {
+    email: form.email
+  }).then(({data}) => {
+    if(data.code === 200){  // 服务器处理成功
+      ElMessage.success('已发送验证码至指定邮箱')
+    }
+    else{   // 服务器处理失败
+      console.warn(`请求地址：/User/SendCode，状态码：${data.code}，错误信息：${data.message}`)
+      ElMessage.warning(data.message)
+    }
+  }).catch(err => {  // 连接失败
+    console.warn(err)
+    ElMessage.warning('发生了一些错误，请联系管理员')
+  })
+}
+
+function userRegister() {
+  axios.post('/User/AddUser', {
+    username: form.username,
+    password: form.password,
+    email: form.email,
+    code: form.code
+  }).then(({data}) => {
+    if(data.code === 200){  // 服务器处理成功
+      ElMessage.success('用户注册成功')
+    }
+    else{   // 服务器处理失败
+      console.warn(`请求地址：/User/SendCode，状态码：${data.code}，错误信息：${data.message}`)
+      ElMessage.warning(data.message)
+    }
+  }).catch(err => {  // 连接失败
+    console.warn(err)
+    ElMessage.warning('发生了一些错误，请联系管理员')
+  })
+}
 
 const validatePassword_repeat = (rule, value, callback) => {
   if (value === ''){
@@ -25,7 +64,6 @@ const validatePassword_repeat = (rule, value, callback) => {
     callback()
   }
 }
-
 
 const rule = {
   username: [
@@ -97,14 +135,14 @@ const rule = {
             </el-col>
 
             <el-col :span="5">
-              <el-button class="askCode">获取验证码</el-button>
+              <el-button @click="askForCode" class="askCode">获取验证码</el-button>
             </el-col>
           </el-row>
         </el-form-item>
       </el-form>
     </div>
     <div style="margin-top: 50px">
-      <el-button class="register" style="width: 250px">立即注册</el-button>
+      <el-button @click="userRegister" class="register" style="width: 250px">立即注册</el-button>
     </div>
     <div style="margin-top: 20px">
       <span style="font-size: 14px;line-height: 15px;color: white">已有账号？</span>

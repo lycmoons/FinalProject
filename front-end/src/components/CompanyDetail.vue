@@ -19,7 +19,7 @@
             <el-descriptions-item label="企业名称">{{ form.company.name }}</el-descriptions-item>
             <el-descriptions-item label="统一社会信用代码">{{ form.company.credit }}</el-descriptions-item>
             <el-descriptions-item label="企业类型">{{ form.company.type }}</el-descriptions-item>
-            <el-descriptions-item label="企业领域">{{ form.company.label }}</el-descriptions-item>
+            <el-descriptions-item label="企业领域">{{ form.company.industry }}</el-descriptions-item>
             <el-descriptions-item label="企业规模">{{ form.company.scale }}</el-descriptions-item>
             <el-descriptions-item label="登记状态">{{ form.company.state }}</el-descriptions-item>
             <el-descriptions-item label="企查分">{{ form.company.score }}</el-descriptions-item>
@@ -62,6 +62,7 @@
 import {onMounted, reactive} from 'vue'
 import {useRoute} from "vue-router";
 import logo from '@/assets/logo.png'
+import {post} from "@/net/index.js";
 
 const route = useRoute()
 
@@ -70,7 +71,7 @@ const form = reactive({
     uid: route.params.uid,
     account: '',
     name: '',
-    label: '',
+    industry: '',
     scale: '',
     state: '',
     score: '',
@@ -91,30 +92,12 @@ const form = reactive({
 })
 
 function getCompanyDetail() {
-  setTimeout(() => {
-    form.company = {
-      uid: 'UID00003',
-      account: '60328467',
-      name: '西门子(上海)电气传动设备有限公司',
-      label: '----',
-      scale: '中型',
-      state: '存续（在营、开业、在册）',
-      score: '897',
-      credit: '9131011574269999X9',
-      tag: ['高新技术企业', '专精特新中小企业', '绿色制造'],
-      date: '2002/9/12',
-      ddl: '2042/9/11',
-      qualification: '一般纳税人',
-      registerCapital: '100万美元',
-      realCapital: '100万美元',
-      type: '有限责任公司（外国法人独资）',
-      employeeScale: '300-399人',
-      insuredEmployee: '326',
-      nationalStandard: '（C3499）',
-      businessScope: '研发、设计和制造变频器、提供相关系统集成的设计、安装、调试和维护，销售自产产品；电子元器件、电器元件、变频器配件和标准件的批发和进出口，并提供相关的技术咨询和技术服务（涉及配额许可证管理、专项规定管理的商品按照国家有关规定办理）（涉及行政许可的，凭许可证经营）。'
-    }
-    form.loading = false;
-  }, 2000)
+  post('/Company/GetCompanyInfo', {
+    uid: form.company.uid
+  }, (data) => {
+    form.company = data
+    form.loading = false
+  })
 }
 
 onMounted(() => {

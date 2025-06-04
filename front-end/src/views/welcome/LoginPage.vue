@@ -2,6 +2,9 @@
   import {User, Lock} from '@element-plus/icons-vue'
   import {reactive, ref} from "vue";
   import router from "@/router/index.js";
+  import axios from "axios";
+  import {ElMessage} from "element-plus";
+  import {saveToken} from "@/net/index.js";
 
   const form = reactive({
     username: '',
@@ -19,6 +22,26 @@
       {required: true, message: '请输入密码', trigger: ['blur', 'change']}
     ]
   }
+
+  function userLogin() {
+    axios.post('/User/Login',{
+      email: form.username,
+      password: form.password
+    }).then(({data}) => {
+      if(data.code === 200){  // 服务器处理成功
+        saveToken(data.data.token,form.remember)
+        ElMessage.success('用户登录成功')
+        router.push('/index')
+      }
+      else{   // 服务器处理失败
+        console.warn(`请求地址：/User/Login，状态码：${data.code}，错误信息：${data.message}`)
+        ElMessage.warning(data.message)
+      }
+    }).catch(err => {  // 连接失败
+      console.warn(err)
+      ElMessage.warning('发生了一些错误，请联系管理员')
+    })
+  }
 </script>
 
 <template>
@@ -31,7 +54,7 @@
         <el-form :model="form" :rules="rule" ref="formRef">
 
           <el-form-item prop="username">
-            <el-input v-model="form.username" type="text" placeholder="用户名/邮箱">
+            <el-input v-model="form.username" type="text" placeholder="邮箱">
               <template #prefix>
                 <el-icon><User/></el-icon>
               </template>
@@ -60,7 +83,7 @@
         </el-form>
       </div>
       <div style="margin-top: 40px">
-        <el-button class="login" @click="router.push('/index')" style="width: 270px;margin-bottom: 20px">登录</el-button>
+        <el-button class="login" @click="userLogin" style="width: 270px;margin-bottom: 20px">登录</el-button>
       </div>
       <div>
         <el-button class="register" @click="router.push('register')" style="width: 270px">注册</el-button>

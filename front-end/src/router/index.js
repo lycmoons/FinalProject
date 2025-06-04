@@ -66,13 +66,6 @@ const router = createRouter({
                     path: 'chart',
                     name: 'index-chart',
                     component: () => import('@/views/index/ChartPage.vue')
-                },
-
-                // 个人中心
-                {
-                    path: 'account',
-                    name: 'index-account',
-                    component: () => import('@/views/index/AccountPage.vue')
                 }
             ]
         },

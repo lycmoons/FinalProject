@@ -2,6 +2,7 @@
 
 import {computed, onMounted, reactive} from "vue";
 import router from "@/router/index.js";
+import {get} from "@/net/index.js";
 
 const form = reactive({
   industryLabel: [
@@ -34,157 +35,10 @@ function selectLabel(label) {
 }
 
 function getIndustryInfo() {
-  setTimeout(() => {
-    form.industryInfo = [
-      {
-        uid: '002',        // UID
-        account: 'B456',    // 户号
-        name: '公司B',       // 企业名称
-        label: '生物医药',      // 企业领域
-        scale: '中',      // 企业规模
-        state: '未登记',      // 登记状态
-        score: '85',      // 企查分
-      },
-
-      // 更多企业信息
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-      {
-        uid: '002',
-        account: 'B456',
-        name: '公司B',
-        label: '生物医药',
-        scale: '中',
-        state: '未登记',
-        score: '85'
-      },
-    ]
+  get('/Company/GetAllCompaniesInfo', (data) => {
+    form.industryInfo = data.companies
     form.loading = false
-  }, 2000) // 模拟延迟 2 秒
+  })
 }
 
 onMounted(() => {
@@ -230,7 +84,7 @@ function checkDetail(company) {
         <el-table-column prop="uid" label="UID"></el-table-column>
         <el-table-column prop="account" label="户号"></el-table-column>
         <el-table-column prop="name" label="企业名称"></el-table-column>
-        <el-table-column prop="label" label="企业领域"></el-table-column>
+        <el-table-column prop="industry" label="企业领域"></el-table-column>
         <el-table-column prop="scale" label="企业规模"></el-table-column>
         <el-table-column prop="state" label="登记状态"></el-table-column>
         <el-table-column prop="score" label="企查分"></el-table-column>

@@ -2,6 +2,7 @@
 import {nextTick, onMounted, reactive, ref, watch} from 'vue'
 import {ArrowRightBold, Clock, MoreFilled} from "@element-plus/icons-vue";
 import router from "@/router/index.js";
+import {get} from "@/net/index.js";
 
 const form = reactive({
   navItems: ['Top Article', 'Capital Markets', 'Mergers & Acquisitions', 'Operations & Strategy',
@@ -16,157 +17,10 @@ const form = reactive({
 })
 
 function getArticleInfo() {
-  setTimeout(() => {
-    form.articles = [
-      {
-        id: '1',
-        photo_url: '',
-        title: 'US banks\' uninsured deposits continue to fall as regulators sharpen their focus',
-        time: '3 hours ago',
-        type: 'Top Article'
-      },
-      {
-        id: '2',
-        photo_url: '',
-        title: 'TIAA\' bank sale boosts US life insurers\' residential mortgage investments',
-        time: '2 hours ago',
-        type: 'Top Article'
-      },
-      {
-        id: '3',
-        photo_url: '',
-        title: '2023 Big Picture: US Consumer Survey Result',
-        time: '4 hours ago',
-        type: 'Top Article'
-      },
-      {
-        id: '1',
-        photo_url: '',
-        title: 'US banks\' uninsured deposits continue to fall as regulators sharpen their focus',
-        time: '3 hours ago',
-        type: 'Capital Markets'
-      },
-      {
-        id: '2',
-        photo_url: '',
-        title: 'TIAA\' bank sale boosts US life insurers\' residential mortgage investments',
-        time: '2 hours ago',
-        type: 'Capital Markets'
-      },
-      {
-        id: '3',
-        photo_url: '',
-        title: '2023 Big Picture: US Consumer Survey Result',
-        time: '4 hours ago',
-        type: 'Capital Markets'
-      },
-      {
-        id: '1',
-        photo_url: '',
-        title: 'US banks\' uninsured deposits continue to fall as regulators sharpen their focus',
-        time: '3 hours ago',
-        type: 'Mergers & Acquisitions'
-      },
-      {
-        id: '2',
-        photo_url: '',
-        title: 'TIAA\' bank sale boosts US life insurers\' residential mortgage investments',
-        time: '2 hours ago',
-        type: 'Mergers & Acquisitions'
-      },
-      {
-        id: '3',
-        photo_url: '',
-        title: '2023 Big Picture: US Consumer Survey Result',
-        time: '4 hours ago',
-        type: 'Mergers & Acquisitions'
-      },
-      {
-        id: '1',
-        photo_url: '',
-        title: 'US banks\' uninsured deposits continue to fall as regulators sharpen their focus',
-        time: '3 hours ago',
-        type: 'Operations & Strategy'
-      },
-      {
-        id: '2',
-        photo_url: '',
-        title: 'TIAA\' bank sale boosts US life insurers\' residential mortgage investments',
-        time: '2 hours ago',
-        type: 'Operations & Strategy'
-      },
-      {
-        id: '3',
-        photo_url: '',
-        title: '2023 Big Picture: US Consumer Survey Result',
-        time: '4 hours ago',
-        type: 'Operations & Strategy'
-      },
-    ]
-    form.headLines = [
-      {
-        content: 'Barron\'s: Palantir Stock Drops After Downgrade. How to Cash in on AI Isn\'t Clear. -- Barrons.com',
-        time: '6 minutes ago',
-        description: 'Dow Jones'
-      },
-      {
-        content: 'Barron\'s: Palantir Stock Drops After Downgrade. How to Cash in on AI Isn\'t Clear. -- Barrons.com',
-        time: '6 minutes ago',
-        description: 'Dow Jones'
-      },
-      {
-        content: 'Barron\'s: Palantir Stock Drops After Downgrade. How to Cash in on AI Isn\'t Clear. -- Barrons.com',
-        time: '6 minutes ago',
-        description: 'Dow Jones'
-      },
-      {
-        content: 'Barron\'s: Palantir Stock Drops After Downgrade. How to Cash in on AI Isn\'t Clear. -- Barrons.com',
-        time: '6 minutes ago',
-        description: 'Dow Jones'
-      },
-      {
-        content: 'Barron\'s: Palantir Stock Drops After Downgrade. How to Cash in on AI Isn\'t Clear. -- Barrons.com',
-        time: '6 minutes ago',
-        description: 'Dow Jones'
-      },
-      {
-        content: 'Barron\'s: Palantir Stock Drops After Downgrade. How to Cash in on AI Isn\'t Clear. -- Barrons.com',
-        time: '6 minutes ago',
-        description: 'Dow Jones'
-      },
-      {
-        content: 'Barron\'s: Palantir Stock Drops After Downgrade. How to Cash in on AI Isn\'t Clear. -- Barrons.com',
-        time: '6 minutes ago',
-        description: 'Dow Jones'
-      },
-      {
-        content: 'Barron\'s: Palantir Stock Drops After Downgrade. How to Cash in on AI Isn\'t Clear. -- Barrons.com',
-        time: '6 minutes ago',
-        description: 'Dow Jones'
-      },
-      {
-        content: 'Barron\'s: Palantir Stock Drops After Downgrade. How to Cash in on AI Isn\'t Clear. -- Barrons.com',
-        time: '6 minutes ago',
-        description: 'Dow Jones'
-      },
-      {
-        content: 'Barron\'s: Palantir Stock Drops After Downgrade. How to Cash in on AI Isn\'t Clear. -- Barrons.com',
-        time: '6 minutes ago',
-        description: 'Dow Jones'
-      },
-      {
-        content: 'Barron\'s: Palantir Stock Drops After Downgrade. How to Cash in on AI Isn\'t Clear. -- Barrons.com',
-        time: '6 minutes ago',
-        description: 'Dow Jones'
-      },
-      {
-        content: 'Barron\'s: Palantir Stock Drops After Downgrade. How to Cash in on AI Isn\'t Clear. -- Barrons.com',
-        time: '6 minutes ago',
-        description: 'Dow Jones'
-      },
-    ]
+  get('/News/GetAllNews', (data) => {
+    form.articles = data.news
     form.loading = false
-  }, 2000)
+  })
 }
 
 onMounted(() => {
