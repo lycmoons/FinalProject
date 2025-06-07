@@ -85,8 +85,19 @@ function getFinanceRisk() {
   form.showOutput1 = true
   form.loading1 = true
 
+  const d = [form.input1.i1,
+    form.input1.i2,
+    form.input1.i3,
+    form.input1.i4,
+    form.input1.i5,
+    form.input1.i6,
+    form.input1.i7,
+    form.input1.i8,
+    form.input1.i9,
+    form.input1.i10,
+    form.input1.i11]
 
-  post('/Model/GetFinancialRisk', form.input1, (data) => {
+  post('/Model/GetFinancialRisk', {input: d}, (data) => {
     form.output1 = data
     form.option1 = getOption(form.indicator1,[form.output1.o1,form.output1.o2,form.output1.o3,form.output1.o4],'财务风险评估结果','财务风险评估指标')
     form.loading1 = false
@@ -98,8 +109,22 @@ function getManagementRisk() {
   form.showOutput2 = true
   form.loading2 = true
 
+  const d = [form.input2.i1,
+    form.input2.i2,
+    form.input2.i3,
+    form.input2.i4,
+    form.input2.i5,
+    form.input2.i6,
+    form.input2.i7,
+    form.input2.i8,
+    form.input2.i9,
+    form.input2.i10,
+    form.input2.i11,
+    form.input2.i12,
+    form.input2.i13,
+    form.input2.i14]
 
-  post('/Model/GetBusinessRisk', form.input2, (data) => {
+  post('/Model/GetBusinessRisk', {input: d}, (data) => {
     form.output2 = data
     form.option2 = getOption(form.indicator2,[form.output2.o1,form.output2.o2,form.output2.o3],'经营风险评估结果','经营风险评估指标')
     form.loading2 = false

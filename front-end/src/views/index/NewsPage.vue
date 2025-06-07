@@ -12,7 +12,7 @@ const form = reactive({
       '融资融券'
   ],
   articles: [],
-  headLines: [],
+  // headLines: [],
   loading: true
 })
 
@@ -103,41 +103,41 @@ function checkNewsDetail(id) {
       </div>
     </div>
 
-    <div class="other">
-      <div class="some-button">
-        <div class="feedback">
-          <span style="font-size: 18px;font-weight: 900">Give Us Feedback</span>
-        </div>
-        <div class="addTo">
-          <span style="font-size: 18px;font-weight: 900">Add To My Shortcuts</span>
-        </div>
-        <div class="getMore">
-          <el-icon><MoreFilled /></el-icon>
-        </div>
-      </div>
-      <div class="headText" style="margin-bottom: 30px">
-        <h1>Dow Jones Top HeadLines</h1>
-      </div>
-      <div class="loading">
-        <svg v-if="form.loading" class="loading rect" width="50" height="50" viewbox="0 0 50 50">
-          <polygon points="0 0 0 50 50 50 50 0" class="polygon" />
-        </svg>
-      </div>
-      <div v-if="!form.loading" class="ctt">
-        <div v-for="item in form.headLines">
-          <div class="ctt-item">
-            <div style="display: flex;flex-direction: column">
-              <h3>{{item.content}}</h3>
-              <div style="display: flex;flex-direction: row;color: grey;align-items: center">
-                <el-icon><Clock /></el-icon>
-                <span style="margin-left: 5px">{{item.time}} · {{item.description}}</span>
-              </div>
-            </div>
-          </div>
-          <hr style="margin-top: 20px;margin-bottom: 20px"/>
-        </div>
-      </div>
-    </div>
+<!--    <div class="other">-->
+<!--      <div class="some-button">-->
+<!--        <div class="feedback">-->
+<!--          <span style="font-size: 18px;font-weight: 900">Give Us Feedback</span>-->
+<!--        </div>-->
+<!--        <div class="addTo">-->
+<!--          <span style="font-size: 18px;font-weight: 900">Add To My Shortcuts</span>-->
+<!--        </div>-->
+<!--        <div class="getMore">-->
+<!--          <el-icon><MoreFilled /></el-icon>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="headText" style="margin-bottom: 30px">-->
+<!--        <h1>Dow Jones Top HeadLines</h1>-->
+<!--      </div>-->
+<!--      <div class="loading">-->
+<!--        <svg v-if="form.loading" class="loading rect" width="50" height="50" viewbox="0 0 50 50">-->
+<!--          <polygon points="0 0 0 50 50 50 50 0" class="polygon" />-->
+<!--        </svg>-->
+<!--      </div>-->
+<!--      <div v-if="!form.loading" class="ctt">-->
+<!--        <div v-for="item in form.headLines">-->
+<!--          <div class="ctt-item">-->
+<!--            <div style="display: flex;flex-direction: column">-->
+<!--              <h3>{{item.content}}</h3>-->
+<!--              <div style="display: flex;flex-direction: row;color: grey;align-items: center">-->
+<!--                <el-icon><Clock /></el-icon>-->
+<!--                <span style="margin-left: 5px">{{item.time}} · {{item.description}}</span>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <hr style="margin-top: 20px;margin-bottom: 20px"/>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 

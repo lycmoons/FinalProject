@@ -33,8 +33,6 @@ const form = reactive({
   },
   output2: {
     star: '',                   // 星级
-    credit_message: '',  // 信用等级分析
-    debt_message: ''     // 资产负债率评价
   },
   template_file: ''
 })
@@ -330,14 +328,6 @@ function handleFileUpload(event) {
                       <StarFilled/>
                     </el-icon>
                 </span>
-              </div>
-              <div class="message-item">
-                <span class="message-label">信用等级分析：</span>
-                <span class="message-content">{{ form.output2.credit_message }}</span>
-              </div>
-              <div class="message-item">
-                <span class="message-label">资产负债率评价：</span>
-                <span class="message-content">{{ form.output2.debt_message }}</span>
               </div>
             </div>
           </div>
