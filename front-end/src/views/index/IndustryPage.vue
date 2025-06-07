@@ -1,20 +1,20 @@
 <script setup>
 
-import {computed, onMounted, reactive} from "vue";
+import { computed, onMounted, reactive } from "vue";
 import router from "@/router/index.js";
-import {get} from "@/net/index.js";
+import { get } from "@/net/index.js";
 
 const form = reactive({
   industryLabel: [
-      '全部',
-      '教育科研', '生物医药', '数据服务',
-      '建筑业', '设备制造', '材料加工',
-      '包装印刷', '房地产经营开发', '医疗',
-      '交通运输', '集成电路', '城市基础设施',
-      '服饰纺织', '汽车', '其他服务',
-      '食品加工', '金融服务', '农业',
-      '能源', '商业', '高压临电',
-      '充换电服务业', '仓储物流', '办公'
+    '全部',
+    '教育科研', '生物医药', '数据服务',
+    '建筑业', '设备制造', '材料加工',
+    '包装印刷', '房地产经营开发', '医疗',
+    '交通运输', '集成电路', '城市基础设施',
+    '服饰纺织', '汽车', '其他服务',
+    '食品加工', '金融服务', '农业',
+    '能源', '商业', '高压临电',
+    '充换电服务业', '仓储物流', '办公'
   ],
   selectedLabel: '全部',
   industryInfo: [],
@@ -26,7 +26,7 @@ const filteredIndustryInfo = computed(() => {
   if (form.selectedLabel === '全部') {
     return form.industryInfo
   } else {
-    return form.industryInfo.filter(item => item.label === form.selectedLabel)
+    return form.industryInfo.filter(item => item.industry === form.selectedLabel)
   }
 })
 
@@ -63,14 +63,8 @@ function checkDetail(company) {
     </el-divider>
 
     <div class="industry-label">
-      <el-tag
-          v-for="label in form.industryLabel"
-          :key="label"
-          @click="selectLabel(label)"
-          class="custom-tag"
-          :closable="false"
-          :class="{ selected: form.selectedLabel === label }"
-      >
+      <el-tag v-for="label in form.industryLabel" :key="label" @click="selectLabel(label)" class="custom-tag"
+        :closable="false" :class="{ selected: form.selectedLabel === label }">
         {{ label }}
       </el-tag>
     </div>
@@ -80,7 +74,8 @@ function checkDetail(company) {
     </el-divider>
 
     <div class="industry-list">
-      <el-table class="transparent-table" v-if="!form.loading" @row-click="checkDetail" :data="filteredIndustryInfo" style="width: 90%;flex: 1;background-color: transparent">
+      <el-table class="transparent-table" v-if="!form.loading" @row-click="checkDetail" :data="filteredIndustryInfo"
+        style="width: 90%;flex: 1;background-color: transparent">
         <el-table-column prop="uid" label="UID"></el-table-column>
         <el-table-column prop="account" label="户号"></el-table-column>
         <el-table-column prop="name" label="企业名称"></el-table-column>
@@ -100,17 +95,17 @@ function checkDetail(company) {
 </template>
 
 <style scoped>
-.industry{
+.industry {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.industry-label{
+.industry-label {
   margin-bottom: 15px;
 }
 
-.industry-list{
+.industry-list {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -124,7 +119,7 @@ function checkDetail(company) {
   border-radius: 50px;
   background: #893445;
   box-shadow: inset 20px -20px 2px #742c3b,
-  inset -20px 20px 2px #9e3c4f;
+    inset -20px 20px 2px #9e3c4f;
   cursor: pointer;
 }
 
@@ -136,7 +131,7 @@ function checkDetail(company) {
   border-radius: 50px;
   background: #3d3e4d;
   box-shadow: inset 20px -20px 2px #343541,
-  inset -20px 20px 2px #464759;
+    inset -20px 20px 2px #464759;
   color: white;
 }
 
@@ -144,7 +139,7 @@ function checkDetail(company) {
   border-radius: 50px;
   background: #893445;
   box-shadow: inset 20px -20px 2px #742c3b,
-  inset -20px 20px 2px #9e3c4f;
+    inset -20px 20px 2px #9e3c4f;
 }
 
 .rect .polygon {

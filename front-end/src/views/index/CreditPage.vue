@@ -1,10 +1,10 @@
 <script setup>
-import {onMounted, reactive, ref, onUnmounted, nextTick} from "vue";
+import { onMounted, reactive, ref, onUnmounted, nextTick } from "vue";
 import * as echarts from 'echarts'
-import {StarFilled} from "@element-plus/icons-vue";
-import {getTokenHeader, post, postMultipart} from "@/net/index.js";
+import { StarFilled } from "@element-plus/icons-vue";
+import { getTokenHeader, post, postMultipart } from "@/net/index.js";
 import axios from "axios";
-import {ElMessage} from "element-plus";
+import { ElMessage } from "element-plus";
 import router from "@/router/index.js";
 
 const form = reactive({
@@ -20,7 +20,7 @@ const form = reactive({
     cost: '',             // 成本费用利润率（%）
     owner_equity: ''      // 所有者权益合计（万元）
   },
-  output1 : {
+  output1: {
     debt_rate: [],
     interest: [],
     inventory_turn: [],
@@ -51,7 +51,7 @@ onMounted(() => {
 // 获取模版文件
 function getTemplateFile() {
   const header = getTokenHeader()
-  if(!header){
+  if (!header) {
     // token 无效，不能发送本次请求
     ElMessage.warning('登录状态过期，请重新登录')
     router.push('/')
@@ -74,8 +74,16 @@ function getDecisionTreeRes() {
   form.showOutput1 = true
   form.loading1 = true
 
+  const d = {
+    debt_rate: Number(form.input1.debt_rate),
+    interest: Number(form.input1.interest),
+    inventory_turn: Number(form.input1.inventory_turn),
+    flow_debt: Number(form.input1.flow_debt),
+    cost: Number(form.input1.cost),
+    owner_equity: Number(form.input1.owner_equity)
+  }
 
-  post('/Model/GetCredit', form.input1, (data) => {
+  post('/Model/GetCredit', d, (data) => {
     form.output1 = data
     form.loading1 = false
     nextTick(() => {
@@ -103,7 +111,7 @@ function getCnnRes() {
   formData.append('targetFile', form.input2.target_file);
 
 
-  postMultipart('/Model/GetTemplate', formData, (data) => {
+  postMultipart('/Model/GetCnnPredict', formData, (data) => {
     form.output2 = data
     form.loading2 = false
   })
@@ -300,12 +308,7 @@ function handleFileUpload(event) {
               </label>
             </div>
 
-            <el-button
-                type="success"
-                @click="getCnnRes"
-                class="submit-btn"
-                :disabled="!form.input2.target_file"
-            >
+            <el-button type="success" @click="getCnnRes" class="submit-btn" :disabled="!form.input2.target_file">
               <i class="el-icon-upload2"></i>
               上传 && 评级
             </el-button>
@@ -324,9 +327,9 @@ function handleFileUpload(event) {
               <div class="message-item">
                 <span class="message-label">信用星级：</span>
                 <span class="message-content">
-                    <el-icon v-for="n in form.output2.star" :key="n" class="star-icon">
-                      <StarFilled/>
-                    </el-icon>
+                  <el-icon v-for="n in form.output2.star" :key="n" class="star-icon">
+                    <StarFilled />
+                  </el-icon>
                 </span>
               </div>
             </div>
@@ -486,8 +489,13 @@ input[type="file"] {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .result-title {
@@ -545,7 +553,9 @@ input[type="file"] {
 
 .star-icon {
   color: gold;
-  font-size: 24px; /* 可选，改变大小 */
-  margin-right: 3px; /* 可选，调整星星间距 */
+  font-size: 24px;
+  /* 可选，改变大小 */
+  margin-right: 3px;
+  /* 可选，调整星星间距 */
 }
 </style>

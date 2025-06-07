@@ -1,15 +1,15 @@
 <script setup>
-import {reactive} from "vue";
-import {use} from 'echarts/core'
-import {CanvasRenderer} from 'echarts/renderers'
-import {RadarChart} from 'echarts/charts'
+import { reactive } from "vue";
+import { use } from 'echarts/core'
+import { CanvasRenderer } from 'echarts/renderers'
+import { RadarChart } from 'echarts/charts'
 import {
   TitleComponent,
   TooltipComponent,
   RadarComponent
 } from 'echarts/components'
 import VChart from 'vue-echarts'
-import {post} from "@/net/index.js";
+import { post } from "@/net/index.js";
 use([
   CanvasRenderer,
   RadarChart,
@@ -68,15 +68,15 @@ const form = reactive({
   option1: {},
   option2: {},
   indicator1: [
-    {name: '流动性', max: 1},
-    {name: '筹资', max: 1},
-    {name: '清偿', max: 1},
-    {name: '成长力', max: 1},
+    { name: '流动性', max: 1 },
+    { name: '筹资', max: 1 },
+    { name: '清偿', max: 1 },
+    { name: '成长力', max: 1 },
   ],
   indicator2: [
-    {name: '经营力', max: 1},
-    {name: '司法', max: 1},
-    {name: '组织', max: 1},
+    { name: '经营力', max: 1 },
+    { name: '司法', max: 1 },
+    { name: '组织', max: 1 },
   ]
 })
 
@@ -85,21 +85,21 @@ function getFinanceRisk() {
   form.showOutput1 = true
   form.loading1 = true
 
-  const d = [form.input1.i1,
-    form.input1.i2,
-    form.input1.i3,
-    form.input1.i4,
-    form.input1.i5,
-    form.input1.i6,
-    form.input1.i7,
-    form.input1.i8,
-    form.input1.i9,
-    form.input1.i10,
-    form.input1.i11]
+  const d = [Number(form.input1.i1),
+  Number(form.input1.i2),
+  Number(form.input1.i3),
+  Number(form.input1.i4),
+  Number(form.input1.i5),
+  Number(form.input1.i6),
+  Number(form.input1.i7),
+  Number(form.input1.i8),
+  Number(form.input1.i9),
+  Number(form.input1.i10),
+  Number(form.input1.i11)]
 
-  post('/Model/GetFinancialRisk', {input: d}, (data) => {
+  post('/Model/GetFinancialRisk', { input: d }, (data) => {
     form.output1 = data
-    form.option1 = getOption(form.indicator1,[form.output1.o1,form.output1.o2,form.output1.o3,form.output1.o4],'财务风险评估结果','财务风险评估指标')
+    form.option1 = getOption(form.indicator1, [form.output1.o1, form.output1.o2, form.output1.o3, form.output1.o4], '财务风险评估结果', '财务风险评估指标')
     form.loading1 = false
   })
 }
@@ -109,24 +109,24 @@ function getManagementRisk() {
   form.showOutput2 = true
   form.loading2 = true
 
-  const d = [form.input2.i1,
-    form.input2.i2,
-    form.input2.i3,
-    form.input2.i4,
-    form.input2.i5,
-    form.input2.i6,
-    form.input2.i7,
-    form.input2.i8,
-    form.input2.i9,
-    form.input2.i10,
-    form.input2.i11,
-    form.input2.i12,
-    form.input2.i13,
-    form.input2.i14]
+  const d = [Number(form.input2.i1),
+  Number(form.input2.i2),
+  Number(form.input2.i3),
+  Number(form.input2.i4),
+  Number(form.input2.i5),
+  Number(form.input2.i6),
+  Number(form.input2.i7),
+  Number(form.input2.i8),
+  Number(form.input2.i9),
+  Number(form.input2.i10),
+  Number(form.input2.i11),
+  Number(form.input2.i12),
+  Number(form.input2.i13),
+  Number(form.input2.i14)]
 
-  post('/Model/GetBusinessRisk', {input: d}, (data) => {
+  post('/Model/GetBusinessRisk', { input: d }, (data) => {
     form.output2 = data
-    form.option2 = getOption(form.indicator2,[form.output2.o1,form.output2.o2,form.output2.o3],'经营风险评估结果','经营风险评估指标')
+    form.option2 = getOption(form.indicator2, [form.output2.o1, form.output2.o2, form.output2.o3], '经营风险评估结果', '经营风险评估指标')
     form.loading2 = false
   })
 }
@@ -269,7 +269,7 @@ function getOption(indicator, data, title, data_name) {
           </div>
 
           <div v-if="!form.loading1" class="result-content">
-            <v-chart class="result-chart" :option="form.option1"/>
+            <v-chart class="result-chart" :option="form.option1" />
             <div class="result-summary">
               <h3>财务风险综合指标：<span class="risk-value">{{ form.output1.o5 }}</span></h3>
             </div>
@@ -360,7 +360,7 @@ function getOption(indicator, data, title, data_name) {
           </div>
 
           <div v-if="!form.loading2" class="result-content">
-            <v-chart class="result-chart" :option="form.option2"/>
+            <v-chart class="result-chart" :option="form.option2" />
             <div class="result-summary">
               <h3>经营风险综合指标：<span class="risk-value">{{ form.output2.o4 }}</span></h3>
             </div>
@@ -473,8 +473,13 @@ function getOption(indicator, data, title, data_name) {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .result-content {

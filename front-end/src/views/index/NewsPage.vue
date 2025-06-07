@@ -1,15 +1,15 @@
 <script setup>
-import {nextTick, onMounted, reactive, ref, watch} from 'vue'
-import {ArrowRightBold, Clock, MoreFilled} from "@element-plus/icons-vue";
+import { nextTick, onMounted, reactive, ref, watch } from 'vue'
+import { ArrowRightBold, Clock, MoreFilled } from "@element-plus/icons-vue";
 import router from "@/router/index.js";
-import {get} from "@/net/index.js";
+import { get } from "@/net/index.js";
 
 const form = reactive({
-  navItems: ['Top Article', 'Capital Markets', 'Mergers & Acquisitions', 'Operations & Strategy',
-      '机器人概念', '低空经济', '鸿蒙概念', '稀土永磁', '智能医疗',
-      '氢能源', '核电核能', '无人驾驶', '光伏', '人工智能概念',
-      '北斗导航', '算力芯片', 'AI智能体', '无人机', 'LED概念',
-      '融资融券'
+  navItems: [
+    '机器人概念', '低空经济', '鸿蒙概念', '稀土永磁', '智能医疗',
+    '氢能源', '核电核能', '无人驾驶', '光伏', '人工智能概念',
+    '北斗导航', '算力芯片', 'AI智能体', '无人机', 'LED概念',
+    '融资融券'
   ],
   articles: [],
   // headLines: [],
@@ -18,6 +18,8 @@ const form = reactive({
 
 function getArticleInfo() {
   get('/News/GetAllNews', (data) => {
+    console.log(data.news);
+
     form.articles = data.news
     form.loading = false
   })
@@ -55,26 +57,20 @@ function checkNewsDetail(id) {
 <template>
   <div class="news">
     <div class="nav-container">
-      <div
-          v-for="(item, index) in form.navItems"
-          :key="index"
-          class="nav-item"
-          :class="{ active: selectedIndex === index }"
-          @click="selectedIndex = index"
-      >
+      <div v-for="(item, index) in form.navItems" :key="index" class="nav-item"
+        :class="{ active: selectedIndex === index }" @click="selectedIndex = index">
         {{ item }}
       </div>
     </div>
 
     <div class="cont">
-      <div v-for="(topic, index) in form.navItems"
-           :key="index"
-           :ref="el => topicRefs[index] = el"
-           class="each-topic">
+      <div v-for="(topic, index) in form.navItems" :key="index" :ref="el => topicRefs[index] = el" class="each-topic">
 
         <div class="headLine">
-          <h1 style="margin-right: 10px">{{topic}}</h1>
-          <el-icon style="font-size: 32px"><ArrowRightBold /></el-icon>
+          <h1 style="margin-right: 10px">{{ topic }}</h1>
+          <el-icon style="font-size: 32px">
+            <ArrowRightBold />
+          </el-icon>
         </div>
 
         <div class="loading">
@@ -86,58 +82,60 @@ function checkNewsDetail(id) {
         <div v-if="!form.loading" class="articles">
           <div v-for="article in form.articles">
             <div @click="checkNewsDetail(article.id)" v-if="article.type === topic" class="article">
-              <img v-if="article.photo_url !== ''" class="article-img" :src="article.photo_url" alt="photo"/>
+              <img v-if="article.photo_url !== ''" class="article-img" :src="article.photo_url" alt="photo" />
               <div style="display: flex;flex-direction: column">
-                <h2>{{article.title}}</h2>
+                <h2>{{ article.title }}</h2>
                 <div style="display: flex;flex-direction: row;color: grey;align-items: center">
-                  <el-icon><Clock /></el-icon>
-                  <span style="margin-left: 5px">{{article.time}}</span>
+                  <el-icon>
+                    <Clock />
+                  </el-icon>
+                  <span style="margin-left: 5px">{{ article.time }}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <hr style="margin-bottom: 30px"/>
+        <hr style="margin-bottom: 30px" />
 
       </div>
     </div>
 
-<!--    <div class="other">-->
-<!--      <div class="some-button">-->
-<!--        <div class="feedback">-->
-<!--          <span style="font-size: 18px;font-weight: 900">Give Us Feedback</span>-->
-<!--        </div>-->
-<!--        <div class="addTo">-->
-<!--          <span style="font-size: 18px;font-weight: 900">Add To My Shortcuts</span>-->
-<!--        </div>-->
-<!--        <div class="getMore">-->
-<!--          <el-icon><MoreFilled /></el-icon>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="headText" style="margin-bottom: 30px">-->
-<!--        <h1>Dow Jones Top HeadLines</h1>-->
-<!--      </div>-->
-<!--      <div class="loading">-->
-<!--        <svg v-if="form.loading" class="loading rect" width="50" height="50" viewbox="0 0 50 50">-->
-<!--          <polygon points="0 0 0 50 50 50 50 0" class="polygon" />-->
-<!--        </svg>-->
-<!--      </div>-->
-<!--      <div v-if="!form.loading" class="ctt">-->
-<!--        <div v-for="item in form.headLines">-->
-<!--          <div class="ctt-item">-->
-<!--            <div style="display: flex;flex-direction: column">-->
-<!--              <h3>{{item.content}}</h3>-->
-<!--              <div style="display: flex;flex-direction: row;color: grey;align-items: center">-->
-<!--                <el-icon><Clock /></el-icon>-->
-<!--                <span style="margin-left: 5px">{{item.time}} · {{item.description}}</span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <hr style="margin-top: 20px;margin-bottom: 20px"/>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!--    <div class="other">-->
+    <!--      <div class="some-button">-->
+    <!--        <div class="feedback">-->
+    <!--          <span style="font-size: 18px;font-weight: 900">Give Us Feedback</span>-->
+    <!--        </div>-->
+    <!--        <div class="addTo">-->
+    <!--          <span style="font-size: 18px;font-weight: 900">Add To My Shortcuts</span>-->
+    <!--        </div>-->
+    <!--        <div class="getMore">-->
+    <!--          <el-icon><MoreFilled /></el-icon>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--      <div class="headText" style="margin-bottom: 30px">-->
+    <!--        <h1>Dow Jones Top HeadLines</h1>-->
+    <!--      </div>-->
+    <!--      <div class="loading">-->
+    <!--        <svg v-if="form.loading" class="loading rect" width="50" height="50" viewbox="0 0 50 50">-->
+    <!--          <polygon points="0 0 0 50 50 50 50 0" class="polygon" />-->
+    <!--        </svg>-->
+    <!--      </div>-->
+    <!--      <div v-if="!form.loading" class="ctt">-->
+    <!--        <div v-for="item in form.headLines">-->
+    <!--          <div class="ctt-item">-->
+    <!--            <div style="display: flex;flex-direction: column">-->
+    <!--              <h3>{{item.content}}</h3>-->
+    <!--              <div style="display: flex;flex-direction: row;color: grey;align-items: center">-->
+    <!--                <el-icon><Clock /></el-icon>-->
+    <!--                <span style="margin-left: 5px">{{item.time}} · {{item.description}}</span>-->
+    <!--              </div>-->
+    <!--            </div>-->
+    <!--          </div>-->
+    <!--          <hr style="margin-top: 20px;margin-bottom: 20px"/>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </div>
 </template>
 
@@ -159,7 +157,7 @@ function checkNewsDetail(id) {
   }
 }
 
-.some-button{
+.some-button {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -174,18 +172,18 @@ function checkNewsDetail(id) {
   transition: all 0.3s ease-in;
 }
 
-.ctt-item{
+.ctt-item {
   transition: all 0.3s ease-in;
 }
 
-.ctt-item:hover{
+.ctt-item:hover {
   border-radius: 20px;
   background: #f5f5f5;
   box-shadow: inset 20px 20px 60px #d0d0d0,
-  inset -20px -20px 60px #ffffff;
+    inset -20px -20px 60px #ffffff;
 }
 
-.ctt-item:hover h3{
+.ctt-item:hover h3 {
   color: blue;
 }
 
@@ -196,20 +194,20 @@ function checkNewsDetail(id) {
   margin-left: 20px;
 }
 
-.headLine{
+.headLine {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 30px;
 }
 
-.news{
+.news {
   display: flex;
   flex-direction: row;
   height: 92vh;
 }
 
-.cont{
+.cont {
   flex: 1;
   overflow-y: auto;
   max-height: 100%;
@@ -263,34 +261,34 @@ function checkNewsDetail(id) {
   background-color: #f0f0f0;
 }
 
-.article:hover{
+.article:hover {
   border-radius: 20px;
   background: #f5f5f5;
   box-shadow: inset 20px 20px 60px #d0d0d0,
-  inset -20px -20px 60px #ffffff;
+    inset -20px -20px 60px #ffffff;
 }
 
-.article:hover h2{
+.article:hover h2 {
   color: blue;
   font-size: 25px;
 }
 
-h2{
+h2 {
   transition: all 0.3s ease-in;
 }
 
-h3{
+h3 {
   transition: all 0.3s ease-in;
 }
 
-.other{
+.other {
   width: 500px;
   margin-left: 50px;
   overflow-y: auto;
   max-height: 100%;
 }
 
-.feedback{
+.feedback {
   height: 40px;
   width: 180px;
   display: flex;
@@ -299,12 +297,12 @@ h3{
   border-radius: 35px;
   background: #f5f5f5;
   box-shadow: inset 20px 20px 60px #d0d0d0,
-  inset -20px -20px 60px #ffffff;
+    inset -20px -20px 60px #ffffff;
   cursor: pointer;
   transition: all 0.3s ease-in;
 }
 
-.addTo{
+.addTo {
   height: 40px;
   width: 200px;
   display: flex;
@@ -313,12 +311,12 @@ h3{
   border-radius: 35px;
   background: #f5f5f5;
   box-shadow: inset 20px 20px 60px #d0d0d0,
-  inset -20px -20px 60px #ffffff;
+    inset -20px -20px 60px #ffffff;
   cursor: pointer;
   transition: all 0.3s ease-in;
 }
 
-.getMore{
+.getMore {
   height: 40px;
   width: 35px;
   display: flex;
@@ -327,29 +325,29 @@ h3{
   border-radius: 35px;
   background: #f5f5f5;
   box-shadow: inset 20px 20px 60px #d0d0d0,
-  inset -20px -20px 60px #ffffff;
+    inset -20px -20px 60px #ffffff;
   cursor: pointer;
   transition: all 0.3s ease-in;
 }
 
-.feedback:hover{
+.feedback:hover {
   border-radius: 35px;
   background: #c9c9c9;
   box-shadow: inset 20px 20px 60px #ababab,
-  inset -20px -20px 60px #e7e7e7;
+    inset -20px -20px 60px #e7e7e7;
 }
 
-.addTo:hover{
+.addTo:hover {
   border-radius: 35px;
   background: #c9c9c9;
   box-shadow: inset 20px 20px 60px #ababab,
-  inset -20px -20px 60px #e7e7e7;
+    inset -20px -20px 60px #e7e7e7;
 }
 
-.getMore:hover{
+.getMore:hover {
   border-radius: 35px;
   background: #c9c9c9;
   box-shadow: inset 20px 20px 60px #ababab,
-  inset -20px -20px 60px #e7e7e7;
+    inset -20px -20px 60px #e7e7e7;
 }
 </style>
